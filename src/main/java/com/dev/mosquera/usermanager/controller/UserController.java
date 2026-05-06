@@ -4,6 +4,8 @@ import com.dev.mosquera.usermanager.dto.UserRequest;
 import com.dev.mosquera.usermanager.dto.UserResponse;
 import com.dev.mosquera.usermanager.model.User;
 import com.dev.mosquera.usermanager.service.UserService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest requestBody) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest requestBody) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(requestBody.getId(), requestBody.getName(), requestBody.getLastname(), requestBody.getAge()));
     }
 
@@ -37,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping(params = "age")
-    public ResponseEntity<List<UserResponse>> findUsersOlderThanAge(@RequestParam int age) {
+    public ResponseEntity<List<UserResponse>> findUsersOlderThanAge(@RequestParam @PositiveOrZero int age) {
         return ResponseEntity.ok().body(userService.findUsersOlderThan(age));
     }
 }

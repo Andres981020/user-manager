@@ -26,31 +26,29 @@ public class UserService {
         }
 
         User newUser = new User(id, name, lastname, age);
-        UserResponse response = userMapToUserResponse(newUser);
+        UserResponse response = mapToResponse(newUser);
         users.add(newUser);
         return response;
     }
 
     public List<UserResponse> findAllUsers() {
-        return users.stream().map(this::userMapToUserResponse).toList();
+        return users.stream().map(this::mapToResponse).toList();
     }
 
     public UserResponse findById(Long id) {
         if(id == null) throw new IllegalArgumentException("The id cannot be null");
-        return users.stream().filter(u -> Objects.equals(u.getId(), id)).map(this::userMapToUserResponse).findFirst().orElseThrow(() -> new UserNotFoundException("The user was not found!"));
+        return users.stream().filter(u -> Objects.equals(u.getId(), id)).map(this::mapToResponse).findFirst().orElseThrow(() -> new UserNotFoundException("The user with id " + id + " was not found!"));
     }
 
     public List<UserResponse> findUsersOlderThan(int age) {
-        if(age < 0) throw new IllegalArgumentException("Age cannot be negative");
-        return users.stream().filter(u -> u.getAge() > age).map(this::userMapToUserResponse).toList();
+        return users.stream().filter(u -> u.getAge() > age).map(this::mapToResponse).toList();
     }
 
     private boolean userExists(Long id) {
-        if(id == null) throw new IllegalArgumentException("The Id cannot be null");
         return users.stream().anyMatch(u -> Objects.equals(u.getId(), id));
     }
 
-    private UserResponse userMapToUserResponse(User user) {
+    private UserResponse mapToResponse(User user) {
         return UserResponse.builder().id(user.getId()).name(user.getName()).lastname(user.getLastname()).age(user.getAge()).build();
     }
 }
