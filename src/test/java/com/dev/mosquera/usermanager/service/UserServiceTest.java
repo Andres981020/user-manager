@@ -6,7 +6,7 @@ import com.dev.mosquera.usermanager.exception.UserNotFoundException;
 import com.dev.mosquera.usermanager.mapper.UserMapper;
 import com.dev.mosquera.usermanager.model.User;
 import com.dev.mosquera.usermanager.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.dev.mosquera.usermanager.service.implementation.UserServiceImp;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +27,7 @@ public class UserServiceTest {
     UserMapper mapper;
 
     @InjectMocks
-    UserService service;
+    UserServiceImp service;
 
     @Test
     void shouldFindUserById() {

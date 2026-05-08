@@ -2,7 +2,6 @@ package com.dev.mosquera.usermanager.controller;
 
 import com.dev.mosquera.usermanager.dto.UserRequest;
 import com.dev.mosquera.usermanager.dto.UserResponse;
-import com.dev.mosquera.usermanager.model.User;
 import com.dev.mosquera.usermanager.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
