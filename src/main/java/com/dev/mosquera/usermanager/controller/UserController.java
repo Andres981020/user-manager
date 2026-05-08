@@ -25,7 +25,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest requestBody) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(requestBody.getId(), requestBody.getName(), requestBody.getLastname(), requestBody.getAge()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(requestBody));
     }
 
     @GetMapping
