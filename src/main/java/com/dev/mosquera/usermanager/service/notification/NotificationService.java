@@ -17,4 +17,16 @@ public class NotificationService {
         strategies = senders.stream().collect(Collectors.toMap(NotificationSender::getType, Function.identity()));
     }
 
+    public void send(NotificationType type, String message) {
+        if(type == null) {
+            throw new IllegalArgumentException("Type cannot be null");
+        }
+        NotificationSender sender = strategies.get(type);
+
+        if(sender == null) {
+            throw new IllegalArgumentException("Notification strategy not found for type: " + type);
+        }
+
+        sender.send(message);
+    }
 }
