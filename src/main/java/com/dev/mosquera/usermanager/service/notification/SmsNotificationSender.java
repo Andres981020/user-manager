@@ -11,7 +11,8 @@ public class SmsNotificationSender implements NotificationSender {
     }
 
     @Override
-    public void send(String message) {
+    public short send(String message) {
         System.out.println("Sending message from Sms");
+        return 0;
     }
 }
