@@ -10,6 +10,7 @@ import com.dev.mosquera.usermanager.repository.UserRepository;
 import com.dev.mosquera.usermanager.service.UserService;
 import com.dev.mosquera.usermanager.service.notification.DefaultRoleNotificationManager;
 import com.dev.mosquera.usermanager.service.notification.NotificationService;
+import com.dev.mosquera.usermanager.service.notification.RoleNotificationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class UserServiceImp implements UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final NotificationService notificationService;
-    private final DefaultRoleNotificationManager manager;
+    private final RoleNotificationManager manager;
 
     @Transactional
     @Override
@@ -35,7 +36,7 @@ public class UserServiceImp implements UserService {
         }
         User userCreated = repository.save(mapper.mapToUser(userRequest));
         NotificationType userNotificationType = manager.resolve(userCreated.getRole());
-        notificationService.send(userNotificationType, "Welcome " + userCreated.getName() + userCreated.getLastname());
+        notificationService.send(userNotificationType, "Welcome " + userCreated.getName() + " " + userCreated.getLastname());
         return mapper.mapToResponse(userCreated);
     }
 

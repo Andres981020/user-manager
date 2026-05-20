@@ -4,5 +4,5 @@ import com.dev.mosquera.usermanager.model.NotificationType;
 
 public interface NotificationSender {
     NotificationType getType();
-    short send(String message);
+    void send(String message);
 }
