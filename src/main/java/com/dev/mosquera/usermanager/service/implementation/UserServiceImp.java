@@ -4,9 +4,12 @@ import com.dev.mosquera.usermanager.dto.UserRequest;
 import com.dev.mosquera.usermanager.dto.UserResponse;
 import com.dev.mosquera.usermanager.exception.UserNotFoundException;
 import com.dev.mosquera.usermanager.mapper.UserMapper;
+import com.dev.mosquera.usermanager.model.NotificationType;
 import com.dev.mosquera.usermanager.model.User;
 import com.dev.mosquera.usermanager.repository.UserRepository;
 import com.dev.mosquera.usermanager.service.UserService;
+import com.dev.mosquera.usermanager.service.notification.DefaultRoleNotificationManager;
+import com.dev.mosquera.usermanager.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,8 @@ import java.util.Optional;
 public class UserServiceImp implements UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
+    private final NotificationService notificationService;
+    private final DefaultRoleNotificationManager manager;
 
     @Transactional
     @Override
@@ -28,7 +33,10 @@ public class UserServiceImp implements UserService {
         if(repository.existsById(userRequest.getId())) {
             throw new IllegalArgumentException("The user with id " + userRequest.getId() + " is already created");
         }
-        return mapper.mapToResponse(repository.save(mapper.mapToUser(userRequest)));
+        User userCreated = repository.save(mapper.mapToUser(userRequest));
+        NotificationType userNotificationType = manager.resolve(userCreated.getRole());
+        notificationService.send(userNotificationType, "Welcome " + userCreated.getName() + userCreated.getLastname());
+        return mapper.mapToResponse(userCreated);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.dev.mosquera.usermanager.dto;
 
+import com.dev.mosquera.usermanager.model.UserRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -22,4 +23,6 @@ public class UserRequest {
 
     @PositiveOrZero
     private int age;
+
+    private UserRole role;
 }

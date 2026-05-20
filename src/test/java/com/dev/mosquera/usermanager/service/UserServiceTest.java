@@ -122,4 +122,5 @@ public class UserServiceTest {
 
         verify(repository, never()).findByAgeGreaterThan(-1);
     }
+
 }
