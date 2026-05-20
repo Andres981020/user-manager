@@ -21,11 +21,11 @@ public class DefaultRoleNotificationManager implements RoleNotificationManager {
 
     @Override
     public NotificationType resolve(UserRole role) {
-        NotificationType type = roleNotificationMapping.get(role);
-        if (type == null) {
-            throw new IllegalArgumentException("Notification type not found for role: " + role);
-        }
+        if (role == null) throw new IllegalArgumentException("User role shouldn't be null");
 
+        NotificationType type = roleNotificationMapping.get(role);
+
+        if(type == null) throw new IllegalArgumentException("Notification type not found for role: " + role);
         return type;
     }
 }
