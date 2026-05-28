@@ -2,6 +2,7 @@ package com.dev.mosquera.usermanager.service.implementation;
 
 import com.dev.mosquera.usermanager.dto.UserRequest;
 import com.dev.mosquera.usermanager.dto.UserResponse;
+import com.dev.mosquera.usermanager.exception.UserAlreadyExistsException;
 import com.dev.mosquera.usermanager.exception.UserNotFoundException;
 import com.dev.mosquera.usermanager.mapper.UserMapper;
 import com.dev.mosquera.usermanager.model.NotificationType;
@@ -32,7 +33,7 @@ public class UserServiceImp implements UserService {
     @Override
     public UserResponse createUser(UserRequest userRequest) {
         if(repository.existsById(userRequest.getId())) {
-            throw new IllegalArgumentException("The user with id " + userRequest.getId() + " is already created");
+            throw new UserAlreadyExistsException("The user with id " + userRequest.getId() + " is already created");
         }
         User userCreated = repository.save(mapper.mapToUser(userRequest));
         NotificationType userNotificationType = manager.resolve(userCreated.getRole());
