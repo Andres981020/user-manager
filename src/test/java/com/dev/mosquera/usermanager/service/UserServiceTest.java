@@ -4,15 +4,23 @@ import com.dev.mosquera.usermanager.dto.UserRequest;
 import com.dev.mosquera.usermanager.dto.UserResponse;
 import com.dev.mosquera.usermanager.exception.UserNotFoundException;
 import com.dev.mosquera.usermanager.mapper.UserMapper;
+import com.dev.mosquera.usermanager.model.NotificationType;
 import com.dev.mosquera.usermanager.model.User;
+import com.dev.mosquera.usermanager.model.UserRole;
 import com.dev.mosquera.usermanager.repository.UserRepository;
 import com.dev.mosquera.usermanager.service.implementation.UserServiceImp;
+import com.dev.mosquera.usermanager.service.notification.DefaultRoleNotificationManager;
+import com.dev.mosquera.usermanager.service.notification.NotificationSender;
+import com.dev.mosquera.usermanager.service.notification.NotificationService;
+import com.dev.mosquera.usermanager.service.notification.RoleNotificationManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -25,6 +33,12 @@ public class UserServiceTest {
 
     @Mock
     UserMapper mapper;
+
+    @Mock
+    NotificationService notificationService;
+
+    @Mock
+    RoleNotificationManager manager;
 
     @InjectMocks
     UserServiceImp service;
@@ -123,4 +137,31 @@ public class UserServiceTest {
         verify(repository, never()).findByAgeGreaterThan(-1);
     }
 
+    @Test
+    void shouldCreateUserWithOrchestration() {
+        UserRequest userRequest = UserRequest.builder().id(2L).name("Peter").lastname("Parker").age(16).role(UserRole.CUSTOMER).build();
+        User userMapped = User.builder().id(2L).name("Peter").lastname("Parker").age(16).role(UserRole.CUSTOMER).build();
+        UserResponse response = UserResponse.builder().id(2L).name("Peter").lastname("Parker").age(16).role(UserRole.CUSTOMER).build();
+
+        when(repository.existsById(2L)).thenReturn(false);
+        when(mapper.mapToUser(userRequest)).thenReturn(userMapped);
+        when(repository.save(userMapped)).thenReturn(userMapped);
+        when(manager.resolve(userMapped.getRole())).thenReturn(NotificationType.SMS);
+        when(mapper.mapToResponse(userMapped)).thenReturn(response);
+
+        UserResponse userCreated = service.createUser(userRequest);
+
+        assertEquals(2L, userCreated.getId());
+        assertEquals("Peter", userCreated.getName());
+        assertEquals("Parker", userCreated.getLastname());
+        assertEquals(16, userCreated.getAge());
+        assertEquals(UserRole.CUSTOMER, userCreated.getRole());
+
+        verify(repository).existsById(2L);
+        verify(repository).save(userMapped);
+        verify(mapper).mapToUser(userRequest);
+        verify(manager).resolve(UserRole.CUSTOMER);
+        verify(notificationService).send(NotificationType.SMS, "Welcome Peter Parker");
+        verify(mapper).mapToResponse(userMapped);
+    }
 }

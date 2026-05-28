@@ -2,6 +2,7 @@ package com.dev.mosquera.usermanager.service.implementation;
 
 import com.dev.mosquera.usermanager.dto.UserRequest;
 import com.dev.mosquera.usermanager.dto.UserResponse;
+import com.dev.mosquera.usermanager.exception.UserAlreadyExistsException;
 import com.dev.mosquera.usermanager.exception.UserNotFoundException;
 import com.dev.mosquera.usermanager.mapper.UserMapper;
 import com.dev.mosquera.usermanager.model.NotificationType;
@@ -10,6 +11,7 @@ import com.dev.mosquera.usermanager.repository.UserRepository;
 import com.dev.mosquera.usermanager.service.UserService;
 import com.dev.mosquera.usermanager.service.notification.DefaultRoleNotificationManager;
 import com.dev.mosquera.usermanager.service.notification.NotificationService;
+import com.dev.mosquera.usermanager.service.notification.RoleNotificationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,17 +27,17 @@ public class UserServiceImp implements UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final NotificationService notificationService;
-    private final DefaultRoleNotificationManager manager;
+    private final RoleNotificationManager manager;
 
     @Transactional
     @Override
     public UserResponse createUser(UserRequest userRequest) {
         if(repository.existsById(userRequest.getId())) {
-            throw new IllegalArgumentException("The user with id " + userRequest.getId() + " is already created");
+            throw new UserAlreadyExistsException("The user with id " + userRequest.getId() + " is already created");
         }
         User userCreated = repository.save(mapper.mapToUser(userRequest));
         NotificationType userNotificationType = manager.resolve(userCreated.getRole());
-        notificationService.send(userNotificationType, "Welcome " + userCreated.getName() + userCreated.getLastname());
+        notificationService.send(userNotificationType, "Welcome " + userCreated.getName() + " " + userCreated.getLastname());
         return mapper.mapToResponse(userCreated);
     }
 
