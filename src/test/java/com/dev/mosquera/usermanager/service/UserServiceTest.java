@@ -9,18 +9,14 @@ import com.dev.mosquera.usermanager.model.User;
 import com.dev.mosquera.usermanager.model.UserRole;
 import com.dev.mosquera.usermanager.repository.UserRepository;
 import com.dev.mosquera.usermanager.service.implementation.UserServiceImp;
-import com.dev.mosquera.usermanager.service.notification.DefaultRoleNotificationManager;
-import com.dev.mosquera.usermanager.service.notification.NotificationSender;
 import com.dev.mosquera.usermanager.service.notification.NotificationService;
 import com.dev.mosquera.usermanager.service.notification.RoleNotificationManager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
