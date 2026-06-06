@@ -12,6 +12,6 @@ public class UserMapper {
     }
 
     public User mapToUser(UserRequest request) {
-        return User.builder().id(request.getId()).name(request.getName()).lastname(request.getLastname()).age(request.getAge()).role(request.getRole()).build();
+        return User.builder().name(request.getName()).lastname(request.getLastname()).age(request.getAge()).role(request.getRole()).build();
     }
 }

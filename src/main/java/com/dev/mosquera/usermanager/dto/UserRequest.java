@@ -11,9 +11,6 @@ import lombok.Data;
 @Data
 @Builder
 public class UserRequest {
-    @NotNull
-    private Long id;
-
     @NotBlank
     private String name;
 

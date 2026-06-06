@@ -32,9 +32,6 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public UserResponse createUser(UserRequest userRequest) {
-        if(repository.existsById(userRequest.getId())) {
-            throw new UserAlreadyExistsException("The user with id " + userRequest.getId() + " is already created");
-        }
         User userCreated = repository.save(mapper.mapToUser(userRequest));
         NotificationType userNotificationType = manager.resolve(userCreated.getRole());
         notificationService.send(userNotificationType, "Welcome " + userCreated.getName() + " " + userCreated.getLastname());
