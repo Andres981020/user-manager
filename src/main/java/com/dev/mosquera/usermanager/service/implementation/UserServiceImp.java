@@ -13,6 +13,7 @@ import com.dev.mosquera.usermanager.service.notification.DefaultRoleNotification
 import com.dev.mosquera.usermanager.service.notification.NotificationService;
 import com.dev.mosquera.usermanager.service.notification.RoleNotificationManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +29,14 @@ public class UserServiceImp implements UserService {
     private final UserMapper mapper;
     private final NotificationService notificationService;
     private final RoleNotificationManager manager;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
     public UserResponse createUser(UserRequest userRequest) {
-        User userCreated = repository.save(mapper.mapToUser(userRequest));
+        User user = mapper.mapToUser(userRequest);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User userCreated = repository.save(user);
         NotificationType userNotificationType = manager.resolve(userCreated.getRole());
         notificationService.send(userNotificationType, "Welcome " + userCreated.getName() + " " + userCreated.getLastname());
         return mapper.mapToResponse(userCreated);

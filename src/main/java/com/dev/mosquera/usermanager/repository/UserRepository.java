@@ -11,4 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByAgeGreaterThan(int age);
     List<User> findByRole(UserRole role);
     Optional<User> findByName(String name);
+    Optional<User> findUserByUsername(String username);
 }

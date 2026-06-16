@@ -18,6 +18,9 @@ public class User {
 
     private String name;
     private String lastname;
+    @Column(unique = true, nullable = false)
+    private String username;
+    private String password;
     private int age;
     @Enumerated(EnumType.STRING)
     private UserRole role;

@@ -14,9 +14,13 @@ public class UserRequest {
     @NotBlank
     private String name;
 
-    @NotNull
     @NotBlank
     private String lastname;
+
+    @NotBlank
+    private String username;
+    @NotBlank
+    private String password;
 
     @PositiveOrZero
     private int age;

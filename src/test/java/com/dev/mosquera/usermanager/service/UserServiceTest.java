@@ -46,6 +46,8 @@ public class UserServiceTest {
                 .id(1L)
                 .name("Andres")
                 .lastname("Mosquera")
+                .username("andresMA")
+                .password("admin123")
                 .age(27)
                 .build();
 
@@ -53,6 +55,7 @@ public class UserServiceTest {
                 .id(1L)
                 .name("Andres")
                 .lastname("Mosquera")
+                .username("andresMA")
                 .age(27)
                 .build();
 
@@ -74,7 +77,7 @@ public class UserServiceTest {
 
     @Test
     void shouldCreateUser() {
-        UserRequest userRequest = UserRequest.builder().id(1L).name("Andres").lastname("Mosquera").age(27).build();
+        UserRequest userRequest = UserRequest.builder().name("Andres").lastname("Mosquera").age(27).build();
         User userMapped = User.builder().id(1L).name("Andres").lastname("Mosquera").age(27).build();
         UserResponse response = UserResponse.builder().id(1L).name("Andres").lastname("Mosquera").age(27).build();
 
@@ -108,7 +111,6 @@ public class UserServiceTest {
     @Test
     void shouldThrowExceptionWhenUserAlreadyExists() {
         UserRequest userRequest = UserRequest.builder()
-                .id(1L)
                 .name("Andres")
                 .lastname("Mosquera")
                 .age(27)
@@ -135,7 +137,7 @@ public class UserServiceTest {
 
     @Test
     void shouldCreateUserWithOrchestration() {
-        UserRequest userRequest = UserRequest.builder().id(2L).name("Peter").lastname("Parker").age(16).role(UserRole.CUSTOMER).build();
+        UserRequest userRequest = UserRequest.builder().name("Peter").lastname("Parker").age(16).role(UserRole.CUSTOMER).build();
         User userMapped = User.builder().id(2L).name("Peter").lastname("Parker").age(16).role(UserRole.CUSTOMER).build();
         UserResponse response = UserResponse.builder().id(2L).name("Peter").lastname("Parker").age(16).role(UserRole.CUSTOMER).build();
 
